@@ -10,6 +10,8 @@ import numpy as np
 
 # pytorch lib
 import torch
+from torch.nn import Parameter
+from torch.nn.init import xavier_normal_
 
 # set print precision
 np.set_printoptions(precision=8)
@@ -17,6 +19,11 @@ np.set_printoptions(precision=8)
 # mkdir log
 # mkdir torch_saved
 # mkdir data
+
+def get_param(shape):
+    param = Parameter(torch.Tensor(*shape));
+    xavier_normal_(param.data)
+    return param
 
 def prepare_env():
     dir_names = ["log", "torch_saved"]

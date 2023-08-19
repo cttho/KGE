@@ -3,7 +3,6 @@ from torch import nn
 import torch.nn.functional as F
 import numpy as np
 from functools import partial
-from einops.layers.torch import Rearrange, Reduce
 from utils import *
 
 class TransE(torch.nn.Module):
@@ -12,13 +11,8 @@ class TransE(torch.nn.Module):
 
         self.p = params
 
-        self.ent_embed = torch.nn.Embedding(
-            self.p.num_ent, self.p.embed_dim, padding_idx=None)
-        torch.nn.init.xavier_normal_(self.ent_embed.weight)
-
-        self.rel_embed = torch.nn.Embedding(
-            self.p.num_rel, self.p.embed_dim, padding_idx=None)
-        torch.nn.init.xavier_normal_(self.rel_embed.weight)
+        self.ent_embed = get_param((self.p.num_ent, self.p.embed_dim))
+        self.rel_embed = get_param((self.p.num_rel, self.p.embed_dim))
 
         self.bceloss = torch.nn.BCELoss()
 
