@@ -1,0 +1,4 @@
+torch==1.12.1+cu116
+ordered-set==4.1.0
+numpy==1.21.5
+einops==0.4.1
