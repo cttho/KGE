@@ -12,7 +12,7 @@ class TransE(torch.nn.Module):
         self.p = params
 
         self.ent_embed = get_param((self.p.num_ent, self.p.embed_dim))
-        self.rel_embed = get_param((self.p.num_rel, self.p.embed_dim))
+        self.rel_embed = get_param((self.p.num_rel*2, self.p.embed_dim))
 
         self.bceloss = torch.nn.BCELoss()
 
@@ -21,8 +21,8 @@ class TransE(torch.nn.Module):
         return loss
 
     def forward(self, sub, rel, neg_ents, strategy='one_to_n'):
-        sub_emb = self.ent_embed(sub)
-        rel_emb = self.rel_embed(rel)
+        sub_emb = self.ent_embed[sub]
+        rel_emb = self.rel_embed[rel]
         all_ent = self.ent_embed
         obj_emb = sub_emb + rel_emb
 
@@ -60,8 +60,8 @@ class DistMult(torch.nn.Module):
         return loss
 
     def forward(self, sub, rel, neg_ents, strategy='one_to_x'):
-        sub_emb = self.ent_embed(sub)
-        rel_emb = self.rel_embed(rel)
+        sub_emb = self.ent_embed[sub]
+        rel_emb = self.rel_embed[rel]
         sub_emb = self.bn0(sub_emb)
         sub_emb = self.inp_drop(sub_emb)
 
