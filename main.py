@@ -547,19 +547,6 @@ if __name__ == "__main__":
     parser.add_argument('--form', type=str, default='plain',
                         help='The reshaping form to use.')
 
-    # Reshape matrix parameters for InteractE
-    parser.add_argument('--k_w', dest="k_w", default=10, type=int,
-                        help='Width of the reshaped matrix. Default: 10')
-    parser.add_argument('--k_h', dest="k_h", default=20, type=int,
-                        help='Height of the reshaped matrix. Default: 20')
-
-    parser.add_argument('--num_filt', dest="num_filt", default=96, type=int,
-                        help='Number of filters in convolution. Default: 96. Test: 32, 64, 128')
-
-    parser.add_argument('--ker_sz', dest="ker_sz", default=9, type=int,
-                        help='Kernel size to use. Default: 9. Test: 3, 5, 7, 9')
-    parser.add_argument('--perm', dest="perm", default=1, type=int,
-                        help='Number of Feature rearrangement to use. Default: 1, 2, 3, 4, 5')
 
     # Configuration for dropout technique
     parser.add_argument('--hid_drop', dest="hid_drop", default=0.5, type=float,
@@ -568,6 +555,9 @@ if __name__ == "__main__":
                         help='Dropout for Feature. Default: 0.5. Test: 0.2, 0.3, 0.4, 0.5')
     parser.add_argument('--inp_drop',  	dest="inp_drop", default=0.2, type=float,
                         help='Dropout for Input layer. Default: 0.5. Test: 0.2, 0.3, 0.4, 0.5')
+    
+    # Configuration for TransE
+    parser.add_argument('-gamma', type=float, default=40.0, help='Margin')
 
     # Configuration for in/output channels for ConvE, HypER, HypE
     parser.add_argument('--in_channels', dest="in_channels",
@@ -579,30 +569,7 @@ if __name__ == "__main__":
     parser.add_argument('--filt_w', type=int, default=9,
                         help='Width of filter. This configuration for HypER model. Default: 9. If filt_h is 1, then filt_w: 1, 2, 3, 5, 7, 9, 11, 12, 13, 15')
 
-    # Configuration for MIXER
-    parser.add_argument('--image_h', dest="image_h",
-                        default=128,  type=int, 	help='')
-
-    parser.add_argument('--image_w', dest="image_w",
-                        default=128,  type=int, 	help='')
-
-    parser.add_argument('--patch_size', dest="patch_size",
-                        default=8,  type=int, 	help='')
-
-    parser.add_argument('--mixer_dim', dest="mixer_dim",
-                        default=256,  type=int, 	help='')
-
-    parser.add_argument('--expansion_factor', dest="expansion_factor",
-                        default=4,  type=int, 	help='')
-
-    parser.add_argument('--expansion_factor_token', dest="expansion_factor_token",
-                        default=0.5,  type=float, 	help='')
-
-    parser.add_argument('--mixer_depth', dest="mixer_depth",
-                        default=16,  type=int, 	help='')
-
-    parser.add_argument('--mixer_dropout', dest="mixer_dropout",
-                        default=0.2,  type=float, 	help='')
+   
 
     # Logging parameters
     parser.add_argument('--logdir', dest="log_dir",

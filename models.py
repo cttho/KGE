@@ -5,8 +5,6 @@ import numpy as np
 from functools import partial
 from einops.layers.torch import Rearrange, Reduce
 from utils import *
-from layers import *
-
 
 class TransE(torch.nn.Module):
     def __init__(self, params, ):
