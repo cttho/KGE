@@ -16,7 +16,7 @@ from torch.utils.data import DataLoader
 from data_loader import TrainDataset, TestDataset
 from utils import get_logger, get_combined_results, set_gpu, prepare_env, set_seed
 
-from models import ComplEx, ConvE, HypER, InteractE, MixER, TuckER
+from models import TransE
 
 
 class Main(object):
@@ -225,7 +225,7 @@ class Main(object):
 
         """
         #model = InteractE(self.p, self.chequer_perm)
-        model = MixER(self.p)
+        model = TransE(self.p)
         model.to(self.device)
         return model
 
@@ -501,7 +501,7 @@ if __name__ == "__main__":
         description="Parser For Arguments", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     # Dataset and Experiment name
-    parser.add_argument('--data', dest="dataset", default='WN18RR',
+    parser.add_argument('--data', dest="dataset", default='kinship',
                         help='Dataset to use for the experiment')
     parser.add_argument("--name", default='testrun_' +
                         str(uuid.uuid4())[:8], help='Name of the experiment')
