@@ -37,13 +37,8 @@ class DistMult(torch.nn.Module):
 
         self.p = params
 
-        self.ent_embed = torch.nn.Embedding(
-            self.p.num_ent, self.p.embed_dim, padding_idx=None)
-        torch.nn.init.xavier_normal_(self.ent_embed.weight)
-
-        self.rel_embed = torch.nn.Embedding(
-            self.p.num_rel*2, self.p.embed_dim, padding_idx=None)
-        torch.nn.init.xavier_normal_(self.rel_embed.weight)
+        self.ent_embed = get_param((self.p.num_ent, self.p.embed_dim))
+        self.rel_embed = get_param((self.p.num_rel*2, self.p.embed_dim))
 
         self.bceloss = torch.nn.BCELoss()
 
@@ -59,7 +54,7 @@ class DistMult(torch.nn.Module):
         loss = self.bceloss(pred, true_label)
         return loss
 
-    def forward(self, sub, rel, neg_ents, strategy='one_to_x'):
+    def forward(self, sub, rel, neg_ents, strategy='one_to_n'):
         sub_emb = self.ent_embed[sub]
         rel_emb = self.rel_embed[rel]
         all_ent = self.ent_embed

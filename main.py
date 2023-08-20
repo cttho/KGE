@@ -497,7 +497,7 @@ if __name__ == "__main__":
 
 
     # Configuration for dropout technique
-    parser.add_argument('--inp_drop', dest="hid_drop", default=0.5, type=float,
+    parser.add_argument('--inp_drop', dest="inp_drop", default=0.5, type=float,
                         help='Dropout for Input layer. Default: 0.5. Test: 0.2, 0.3, 0.4, 0.5')
     
     # Configuration for TransE
