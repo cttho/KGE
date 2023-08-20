@@ -62,90 +62,13 @@ class DistMult(torch.nn.Module):
     def forward(self, sub, rel, neg_ents, strategy='one_to_x'):
         sub_emb = self.ent_embed[sub]
         rel_emb = self.rel_embed[rel]
+        all_ent = self.ent_embed
+
         sub_emb = self.bn0(sub_emb)
         sub_emb = self.inp_drop(sub_emb)
 
-        if strategy == 'one_to_n':
-            x = torch.mm(sub_emb * rel_emb,
-                         self.ent_embed.weight.transpose(1, 0))
-            x += self.bias.expand_as(x)
-        else:
-            x = torch.mul((sub_emb * rel_emb).unsqueeze(1),
-                          self.ent_embed(neg_ents)).sum(dim=-1)
-            x += self.bias[neg_ents]
-
-        pred = torch.sigmoid(x)
-
-        return pred
-
-
-class ComplEx(torch.nn.Module):
-    def __init__(self, params, ):
-        super(ComplEx, self).__init__()
-
-        self.p = params
-
-        self.ent_embed_real = torch.nn.Embedding(
-            self.p.num_ent, self.p.embed_dim, padding_idx=None)
-        torch.nn.init.xavier_normal_(self.ent_embed_real.weight)
-
-        self.ent_embed_imaginary = torch.nn.Embedding(
-            self.p.num_ent, self.p.embed_dim, padding_idx=None)
-        torch.nn.init.xavier_normal_(self.ent_embed_imaginary.weight)
-
-        self.rel_embed_real = torch.nn.Embedding(
-            self.p.num_rel*2, self.p.embed_dim, padding_idx=None)
-        torch.nn.init.xavier_normal_(self.rel_embed_real.weight)
-
-        self.rel_embed_imaginary = torch.nn.Embedding(
-            self.p.num_rel*2, self.p.embed_dim, padding_idx=None)
-        torch.nn.init.xavier_normal_(self.rel_embed_imaginary.weight)
-
-        self.bceloss = torch.nn.BCELoss()
-
-        self.inp_drop = torch.nn.Dropout(self.p.inp_drop)
-        self.bn0 = torch.nn.BatchNorm1d(self.p.embed_dim)
-        self.bn1 = torch.nn.BatchNorm1d(self.p.embed_dim)
-
-        self.register_parameter(
-            'bias', torch.nn.Parameter(torch.zeros(self.p.num_ent)))
-
-    def loss(self, pred, true_label=None, sub_samp=None):
-        label_pos = true_label[0]
-        label_neg = true_label[1:]
-        loss = self.bceloss(pred, true_label)
-        return loss
-
-    def forward(self, sub, rel, neg_ents, strategy='one_to_x'):
-        sub_emb_real = self.ent_embed_real(sub)
-        sub_emb_imaginary = self.ent_embed_imaginary(sub)
-
-        rel_emb_real = self.rel_embed_real(rel)
-        rel_emb_imaginary = self.rel_embed_imaginary(rel)
-
-        sub_emb_real = self.bn0(sub_emb_real)
-        sub_emb_real = self.inp_drop(sub_emb_real)
-
-        sub_emb_imaginary = self.bn0(sub_emb_imaginary)
-        sub_emb_imaginary = self.inp_drop(sub_emb_imaginary)
-
-        if strategy == 'one_to_n':
-            x = torch.mm(sub_emb_real*rel_emb_real, self.ent_embed_real.weight.transpose(1, 0)) +\
-                torch.mm(sub_emb_real*rel_emb_imaginary, self.ent_embed_imaginary.weight.transpose(1, 0)) +\
-                torch.mm(sub_emb_imaginary*rel_emb_real, self.ent_embed_imaginary.weight.transpose(1, 0)) -\
-                torch.mm(sub_emb_imaginary*rel_emb_imaginary,
-                         self.ent_embed_real.weight.transpose(1, 0))
-            x += self.bias.expand_as(x)
-        else:
-            neg_embs_real = self.ent_embed_real(neg_ents)
-            neg_embs_imaginary = self.ent_embed_imaginary(neg_ents)
-
-            x = (torch.mul((sub_emb_real*rel_emb_real).unsqueeze(1), neg_embs_real) +
-                 torch.mul((sub_emb_real*rel_emb_imaginary).unsqueeze(1), neg_embs_imaginary) +
-                 torch.mul((sub_emb_imaginary*rel_emb_real).unsqueeze(1), neg_embs_imaginary) -
-                 torch.mul((sub_emb_imaginary*rel_emb_imaginary).unsqueeze(1), neg_embs_real)).sum(dim=-1)
-
-            x += self.bias[neg_ents]
+        x = torch.mm(sub_emb * rel_emb, all_ent.weight.transpose(1, 0))
+        x += self.bias.expand_as(x)
 
         pred = torch.sigmoid(x)
 

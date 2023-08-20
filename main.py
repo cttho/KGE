@@ -507,18 +507,6 @@ if __name__ == "__main__":
     # Configuration for TransE
     parser.add_argument('-gamma', type=float, default=40.0, help='Margin')
 
-    # Configuration for in/output channels for ConvE, HypER, HypE
-    parser.add_argument('--in_channels', dest="in_channels",
-                        default=1,  type=int, 	help='Input channels. Default: 1')
-    parser.add_argument('--out_channels', dest="out_channels", default=32, type=int,
-                        help='Output channels. Default: 96. Test: 32, 64, 128. Can be the same with num_filt hyperparameter.')
-    parser.add_argument('--filt_h', type=int, default=1,
-                        help='Height of filter. This configuration for HypER model. Default: 1. Choice: 1, 2, 3, 5, 7, 9')
-    parser.add_argument('--filt_w', type=int, default=9,
-                        help='Width of filter. This configuration for HypER model. Default: 9. If filt_h is 1, then filt_w: 1, 2, 3, 5, 7, 9, 11, 12, 13, 15')
-
-   
-
     # Logging parameters
     parser.add_argument('--logdir', dest="log_dir",
                         default='./log/', help='Log directory')
