@@ -62,7 +62,7 @@ class DistMult(torch.nn.Module):
         sub_emb = self.bn0(sub_emb)
         sub_emb = self.inp_drop(sub_emb)
 
-        x = torch.mm(sub_emb * rel_emb, all_ent.weight.transpose(1, 0))
+        x = torch.mm(sub_emb * rel_emb, all_ent.transpose(1, 0))
         x += self.bias.expand_as(x)
 
         pred = torch.sigmoid(x)
