@@ -91,8 +91,6 @@ class Main(object):
 
         self.p.num_ent = len(self.ent2id)
         self.p.num_rel = len(self.rel2id) // 2
-        self.p.embed_dim = self.p.k_w * \
-            self.p.k_h if self.p.embed_dim is None else self.p.embed_dim
 
         self.data = ddict(list)
         sr2o = ddict(set)
@@ -261,28 +259,6 @@ class Main(object):
 
         self.model.load_state_dict(state_dict)
         self.optimizer.load_state_dict(state['optimizer'])
-
-    # def evaluate(self, split, epoch=0):
-    #     """
-    #     Function to evaluate the model on validation or test set
-    #     Parameters
-    #     ----------
-    #     split: (string) If split == 'valid' then evaluate on the validation set, else the test set
-    #     epoch: (int) Current epoch count
-
-    #     Returns
-    #     -------
-    #     resutls:			The evaluation results containing the following:
-    #             results['mr']:         	Average of ranks_left and ranks_right
-    #             results['mrr']:         Mean Reciprocal Rank
-    #             results['hits@k']:      Probability of getting the correct preodiction in top-k ranks based on predicted score
-    #     """
-    #     left_results = self.predict(split=split, mode='tail_batch')
-    #     right_results = self.predict(split=split, mode='head_batch')
-    #     results = get_combined_results(left_results, right_results)
-    #     self.logger.info('[Epoch {} {}]: MRR: Tail : {:.5}, Head : {:.5}, Avg : {:.5}'.format(
-    #         epoch, split, results['left_mrr'], results['right_mrr'], results['mrr']))
-    #     return results
 
     def evaluate(self, split, epoch=0):
         """
