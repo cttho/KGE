@@ -16,7 +16,7 @@ from torch.utils.data import DataLoader
 from data_loader import TrainDataset, TestDataset
 from utils import get_logger, get_combined_results, set_gpu, prepare_env, set_seed
 
-from models import TransE
+from models import TransE, DistMult
 
 
 class Main(object):
@@ -172,8 +172,13 @@ class Main(object):
         Creates the computational graph for model and initializes it
 
         """
-        #model = InteractE(self.p, self.chequer_perm)
-        model = TransE(self.p)
+        if self.p.model.lower() == 'transe':
+            model = TransE(self.p)
+        elif self.p.model.lower() == 'distmult':
+            model = DistMult(self.p)
+        else:
+            raise NotImplementedError
+
         model.to(self.device)
         return model
 
@@ -453,6 +458,9 @@ if __name__ == "__main__":
                         help='Dataset to use for the experiment')
     parser.add_argument("--name", default='testrun_' +
                         str(uuid.uuid4())[:8], help='Name of the experiment')
+    
+    # Model used for training
+    parser.add_argument('-model', dest='model', default='transe', help='Model Name')
 
     # Training parameters
     parser.add_argument("--gpu", type=str, default='0',
