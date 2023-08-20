@@ -460,7 +460,7 @@ if __name__ == "__main__":
                         str(uuid.uuid4())[:8], help='Name of the experiment')
     
     # Model used for training
-    parser.add_argument('-model', dest='model', default='transe', help='Model Name')
+    parser.add_argument('--model', dest='model', default='transe', help='Model Name')
 
     # Training parameters
     parser.add_argument("--gpu", type=str, default='0',
@@ -479,8 +479,8 @@ if __name__ == "__main__":
                         help='Learning Rate')
     parser.add_argument("--epoch", dest='max_epochs',  default=100,
                         type=int, help='Maximum number of epochs. Default: 100')
-    parser.add_argument("--num_workers", type=int, default=10,
-                        help='Maximum number of workers used in DataLoader. Default: 10')
+    parser.add_argument("--num_workers", type=int, default=0,
+                        help='Maximum number of workers used in DataLoader. Default: 0')
     parser.add_argument('--seed', dest="seed", default=42,
                         type=int, help='Seed to reproduce results. Default: 42')
     parser.add_argument('--restore', dest="restore", action='store_true',
@@ -489,7 +489,7 @@ if __name__ == "__main__":
     # Model parameters
     parser.add_argument("--lbl_smooth", dest='lbl_smooth', default=0.1,
                         type=float,	help='Label smoothing for true labels')
-    parser.add_argument("--embed_dim", type=int, default=100,
+    parser.add_argument("--embed_dim", type=int, default=400,
                         help='Embedding dimension for entity and relation')
 
     parser.add_argument('--bias', dest="bias", action='store_true',
@@ -497,8 +497,8 @@ if __name__ == "__main__":
 
 
     # Configuration for dropout technique
-    parser.add_argument('--hid_drop', dest="hid_drop", default=0.5, type=float,
-                        help='Dropout for Hidden layer. Default: 0.5. Test: 0.2, 0.3, 0.4, 0.5')
+    parser.add_argument('--inp_drop', dest="hid_drop", default=0.5, type=float,
+                        help='Dropout for Input layer. Default: 0.5. Test: 0.2, 0.3, 0.4, 0.5')
     
     # Configuration for TransE
     parser.add_argument('-gamma', type=float, default=40.0, help='Margin')
