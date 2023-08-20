@@ -467,11 +467,11 @@ if __name__ == "__main__":
                         default=128, type=int, help='Batch size')
     parser.add_argument("--l2",	type=float, default=0.0,
                         help='L2 regularization')
-    parser.add_argument("--lr",	type=float, default=0.0001,
+    parser.add_argument("--lr",	type=float, default=0.001,
                         help='Learning Rate')
-    parser.add_argument("--epoch", dest='max_epochs',  default=500,
-                        type=int, help='Maximum number of epochs. Default: 500')
-    parser.add_argument("--num_workers", type=int, default=0,
+    parser.add_argument("--epoch", dest='max_epochs',  default=100,
+                        type=int, help='Maximum number of epochs. Default: 100')
+    parser.add_argument("--num_workers", type=int, default=10,
                         help='Maximum number of workers used in DataLoader. Default: 10')
     parser.add_argument('--seed', dest="seed", default=42,
                         type=int, help='Seed to reproduce results. Default: 42')
@@ -481,28 +481,16 @@ if __name__ == "__main__":
     # Model parameters
     parser.add_argument("--lbl_smooth", dest='lbl_smooth', default=0.1,
                         type=float,	help='Label smoothing for true labels')
-    parser.add_argument("--embed_dim", type=int, default=400,
-                        help='Embedding dimension for entity and relation, ignored if k_h and k_w are set')
-
-    # Specific setting for embedding vectors: entity embedding vector and relation embedding vector
-    parser.add_argument('--ent_vec_dim', type=int, default=200,
-                        help="Embedding dimension of entity. Default: 200")
-    parser.add_argument('--rel_vec_dim', type=int, default=200,
-                        help="Embedding dimension of relation. Default: 200")
+    parser.add_argument("--embed_dim", type=int, default=100,
+                        help='Embedding dimension for entity and relation')
 
     parser.add_argument('--bias', dest="bias", action='store_true',
                         help='Whether to use bias in the model.')
-    parser.add_argument('--form', type=str, default='plain',
-                        help='The reshaping form to use.')
 
 
     # Configuration for dropout technique
     parser.add_argument('--hid_drop', dest="hid_drop", default=0.5, type=float,
                         help='Dropout for Hidden layer. Default: 0.5. Test: 0.2, 0.3, 0.4, 0.5')
-    parser.add_argument('--feat_drop', dest="feat_drop", default=0.2, type=float,
-                        help='Dropout for Feature. Default: 0.5. Test: 0.2, 0.3, 0.4, 0.5')
-    parser.add_argument('--inp_drop',  	dest="inp_drop", default=0.2, type=float,
-                        help='Dropout for Input layer. Default: 0.5. Test: 0.2, 0.3, 0.4, 0.5')
     
     # Configuration for TransE
     parser.add_argument('-gamma', type=float, default=40.0, help='Margin')
